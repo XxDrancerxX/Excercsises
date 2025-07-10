@@ -405,10 +405,9 @@ const { elementType } = require("prop-types");
 //   const deepClone = JSON.parse(JSON.stringify(element))
 //   shallowCopy[1]["skills"] = ["aaa","aaaaaa"]
 //   deepClone[1]["skills"] = ["aaa","bbbbbb"]
-//   console.log("original --", element);  
+//   console.log("original --", element);
 //   console.log("!!shallow copy --",shallowCopy);
 //   console.log("!!Deep Copy copy --",deepClone);
-  
 
 // }
 // const employees = [
@@ -465,7 +464,6 @@ const { elementType } = require("prop-types");
 // console.log(findPrefix(["dog", "racecar", "car"])); // ""
 // console.log(findPrefix(["interview", "interrupt", "integrate", "integral"])); // "int"
 
-
 // #===============================================================================================================================
 
 // # 🚨 HARD EXERCISE 2: Nested Data Transformation by Type
@@ -485,34 +483,123 @@ const { elementType } = require("prop-types");
 // 3. Return a **new structure** (don't mutate the original)
 // 4. Must support **nested structures of any depth**
 
-
 // #------------------------------------------------------------------------------------------------------------------------------
+// //first solution:
+// function dataTypes(obj) {
+//   const newObj = {};
+//   for (let element in obj) {
+//     const value = obj[element];
+//     console.log("!!VALUE!! --", value);
 
-function dataTypes(obj){
-  const newObj = {}
-  for (let element in obj){
-    if(typeof obj[element] == "string"){
-      let converted = obj[element].toUpperCase()
-      newObj[obj[element]]
-    }
-    
-  }
-   return console.log(newObj)
- 
-}
+//     // 1. Primitive at top-level
+//     if (typeof value == "string") {
+//       newObj[element] = value.toUpperCase();
+//     }
 
-const input = {
-  name: "alice",
-  age: 25,
-  active: true,
-  skills: ["js", "python", 3],
-  preferences: {
-    darkMode: false,
-    fontSize: 14,
-    tags: ["code", true, 7]
-  }
-};
-dataTypes(input)
+//     // 2. Array at top-level (like "skills")
+//     else if (Array.isArray(value)) {
+//       const newArray = [];
+//       for (let subValue of value) {
+//         if (typeof subValue == "string") {
+//           newArray.push(subValue.toUpperCase());
+//         } else if (typeof subValue == "number") {
+//           newArray.push(subValue * 10);
+//         }
+//       }
+//       newObj[element] = newArray;
+//     }
+
+//     // 3. preferences object (handled manually)
+//     else if (
+//       typeof value == "object" &&
+//       value != null &&
+//       !Array.isArray(value)
+//     ) {
+//       const newNestedObj = {};
+//       for (let key in value) {
+//         const subValue = value[key];
+//         if (typeof subValue == "boolean") {
+//           newNestedObj[key] = !subValue;
+//         } else if (typeof subValue == "number") {
+//           newNestedObj[key] = subValue * 10;
+//         } else if (typeof subValue === "string") {
+//           newNestedObj[key] = subValue.toUpperCase();
+//         } else if (Array.isArray(subValue)) {
+//           const newArray = [];
+//           for (let subValueArray of subValue) {
+//             if (typeof subValueArray == "string") {
+//               newArray.push(subValueArray.toUpperCase());
+//             } else if (typeof subValueArray == "boolean") {
+//               newArray.push(!subValueArray);
+//             } else if (typeof subValueArray == "number") {
+//               newArray.push(subValueArray * 10);
+//             }
+//           }
+//           newNestedObj[key] = newArray;
+//         }
+//       }
+//       newObj[element] = newNestedObj
+//     } else if (typeof value == "number") {
+//       newObj[element] = value * 10;
+//     } else if (typeof value == "boolean") {
+//       newObj[element] = !value;
+//     } else {
+//       newObj[element] = value;
+//     }
+//   }
+//   return newObj;
+// }
+
+// const input = {
+//   name: "alice",
+//   age: 25,
+//   active: true,
+//   skills: ["js", "python", 3],
+//   preferences: {
+//     darkMode: false,
+//     fontSize: 14,
+//     tags: ["code", true, 7],
+//   },
+// };
+
+// console.log(dataTypes(input));
 
 // Your function should return a transformed object with same structure but changed values based on type.
 
+// #------------------------------------------------------------------------------------------------------------------------------
+//Second solution:
+// function handleDataTypes(obj) {
+//   if (typeof obj === "string") {
+//     return obj.toUpperCase();
+//   } else if (typeof obj == "number") {
+//     return obj * 10;
+//   } else if (typeof obj === "boolean") {
+//     return !obj;
+//   }
+//   else if(Array.isArray(obj)){
+//     return obj.map(function (item){
+//       return handleDataTypes(item);
+//     })
+//   }
+//   else if(typeof obj === "object" && obj != null){
+//     const newObj = {}
+//     for(let key in obj){
+//       newObj[key] = handleDataTypes(obj[key])
+//     }
+//     return newObj
+//   }
+// }
+
+// const input = {
+//   name: "alice",
+//   age: 25,
+//   active: true,
+//   skills: ["js", "python", 3],
+//   preferences: {
+//     darkMode: false,
+//     fontSize: 14,
+//     tags: ["code", true, 7],
+//   },
+// };
+
+// console.log(handleDataTypes(input));
